@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jesse William | Gestor de Tráfego Pago</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green:#18b853;--green-d:#0f8a3a;--green-pale:#e6f6ed;--green-glow:rgba(24,184,83,.13);
+      --hero-bg:#1c2b21;--page-bg:#f5f7f5;--white:#fff;--border:#dde8dd;
+      --text:#1a211c;--text-sub:#4d5e52;--text-hero:#edf7f0;--text-dim:rgba(237,247,240,.62);
+      --r:12px;--rpill:999px;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--mw:1060px;--py:80px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--page-bg);color:var(--text);-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.6}
+    a{color:inherit;text-decoration:none} ul{list-style:none} button{font-family:inherit}
+    .wrap{max-width:var(--mw);margin-inline:auto;padding-inline:24px}
+    .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);font-family:var(--fh)}
+    .h1{font-family:var(--fh);font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:800;line-height:1.08}
+    .h2{font-family:var(--fh);font-size:clamp(1.65rem,3.5vw,2.4rem);font-weight:700;line-height:1.15}
+    .h3{font-family:var(--fh);font-size:1.08rem;font-weight:700;line-height:1.25}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--rpill);font-family:var(--fb);font-size:.97rem;font-weight:500;cursor:pointer;border:1.5px solid transparent;transition:transform .17s,box-shadow .17s,background .17s,border-color .17s,color .17s;white-space:nowrap}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-p{background:var(--green);color:#fff;box-shadow:0 3px 14px rgba(24,184,83,.30)}
+    .btn-p:hover{background:var(--green-d)}
+    .btn-ghost{background:transparent;color:var(--text-hero);border-color:rgba(255,255,255,.28)}
+    .btn-ghost:hover{border-color:var(--green);color:var(--green)}
+    .btn-out{background:transparent;color:var(--text);border-color:var(--border)}
+    .btn-out:hover{border-color:var(--green);color:var(--green)}
+
+    /* HERO */
+    #hero{background:var(--hero-bg);position:relative;overflow:hidden;padding:96px 0 76px}
+    #hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 80% 20%,rgba(24,184,83,.16),transparent),radial-gradient(ellipse 50% 60% at 5% 85%,rgba(24,184,83,.08),transparent);pointer-events:none}
+    #hero::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+    .hw{position:relative;z-index:1}
+    .h-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(24,184,83,.12);border:1px solid rgba(24,184,83,.28);border-radius:var(--rpill);padding:5px 14px;margin-bottom:26px}
+    .h-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2.2s ease-in-out infinite}
+    .h-badge span{font-size:.8rem;color:rgba(24,184,83,.9);font-weight:500}
+    @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+    .h-title{color:var(--text-hero);margin-bottom:22px}
+    .h-title .ac{color:var(--green)}
+    .h-sub{color:var(--text-dim);font-size:1.08rem;max-width:520px;margin-bottom:36px;line-height:1.75}
+    .h-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:48px}
+    .h-bullets{display:flex;flex-direction:column;gap:11px;margin-bottom:52px}
+    .brow{display:flex;align-items:flex-start;gap:11px;color:rgba(240,253,244,.75);font-size:.95rem;line-height:1.55}
+    .bchk{width:20px;height:20px;border-radius:50%;background:rgba(24,184,83,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:.7rem;color:var(--green)}
+    .h-stats{display:flex;flex-wrap:wrap;gap:8px 0;border-top:1px solid rgba(255,255,255,.08);padding-top:36px}
+    .sc{padding-right:32px}
+    .sc:not(:last-child){border-right:1px solid rgba(255,255,255,.08);margin-right:32px}
+    .sn{font-family:var(--fh);font-size:1.9rem;font-weight:800;color:var(--green);line-height:1}
+    .sd{font-size:.78rem;color:rgba(240,253,244,.4);margin-top:4px}
+
+    section{padding:var(--py) 0}
+    .sh{text-align:center;margin-bottom:52px}
+    .sh .tag{margin-bottom:12px}
+    .sh .h2{margin-bottom:14px}
+    .sh .sub{color:var(--text-sub);max-width:500px;margin-inline:auto;font-size:.97rem}
+
+    /* SOBRE */
+    #about{background:var(--white)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+    .about-card{background:var(--page-bg);border:1px solid var(--border);border-radius:var(--r);padding:36px 32px;display:flex;flex-direction:column;gap:24px}
+    .about-row{display:flex;align-items:flex-start;gap:16px}
+    .about-ico{width:42px;height:42px;background:var(--green-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+    .about-row-title{font-family:var(--fh);font-weight:700;font-size:.97rem;margin-bottom:4px}
+    .about-row-sub{font-size:.87rem;color:var(--text-sub);line-height:1.55}
+    .about-divider{height:1px;background:var(--border)}
+
+    /* NICHOS */
+    #nichos{background:var(--page-bg);padding:56px 0}
+    .nichos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+    .nicho-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;text-align:center;transition:border-color .2s,transform .2s;cursor:default}
+    .nicho-card:hover{border-color:var(--green);transform:translateY(-2px)}
+    .nicho-card.open{background:var(--green-pale);border:1.5px dashed var(--green)}
+    .nicho-emoji{font-size:1.8rem;margin-bottom:8px}
+    .nicho-label{font-family:var(--fh);font-weight:700;font-size:.85rem}
+    .nicho-label.green{color:var(--green)}
+
+    /* O QUE EU FAÇO */
+    #what{background:var(--white)}
+    .sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+    .sc2{background:var(--page-bg);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;transition:transform .2s,box-shadow .2s,border-color .2s}
+    .sc2:hover{transform:translateY(-3px);box-shadow:0 4px 24px rgba(0,0,0,.09);border-color:rgba(24,184,83,.3)}
+    .sico{width:40px;height:40px;background:var(--green-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:1.2rem}
+    .sc2 .h3{margin-bottom:8px}
+    .sc2 p{font-size:.9rem;color:var(--text-sub);line-height:1.6}
+
+    /* PRA QUEM É */
+    #forwho{background:var(--page-bg)}
+    .fwg{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .fwc{border-radius:var(--r);padding:28px 24px}
+    .fwc.yes{background:#edfaf2;border:1.5px solid #9de8bf}
+    .fwc.no{background:#fef2f2;border:1.5px solid #fbb6b6}
+    .fwt{font-family:var(--fh);font-size:1rem;font-weight:700;margin-bottom:18px}
+    .fwt.g{color:#0a7a36} .fwt.r{color:#a61c1c}
+    .fwl li{display:flex;align-items:flex-start;gap:9px;font-size:.91rem;line-height:1.55;margin-bottom:10px}
+
+    /* COMO FUNCIONA */
+    #how{background:var(--hero-bg);position:relative;overflow:hidden}
+    #how::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+    #how .sh .h2{color:var(--text-hero)} #how .sh .sub{color:var(--text-dim)}
+    .stg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;position:relative;z-index:1}
+    .stc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:28px 22px;position:relative}
+    .stc .big{font-family:var(--fh);font-size:4.5rem;font-weight:800;color:rgba(24,184,83,.09);line-height:1;position:absolute;top:10px;right:14px}
+    .sttag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
+    .stc .h3{color:var(--text-hero);margin-bottom:8px} .stc p{font-size:.88rem;color:var(--text-dim);line-height:1.6}
+
+    /* OFERTAS */
+    #offers{background:var(--white)}
+    .og{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:24px;align-items:start}
+    .oc{border:1.5px solid var(--border);border-radius:var(--r);padding:32px 28px;background:var(--white);position:relative}
+    .oc.ft{border-color:var(--green);box-shadow:0 0 0 4px var(--green-glow)}
+    .obadge{position:absolute;top:-13px;right:20px;background:var(--green);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:var(--rpill)}
+    .oc .tag{margin-bottom:8px;display:block} .oc .h2{font-size:1.55rem;margin-bottom:8px}
+    .otag{font-size:.91rem;color:var(--text-sub);margin-bottom:24px;line-height:1.55}
+    .odiv{height:1px;background:var(--border);margin-bottom:20px}
+    .oit{margin-bottom:24px}
+    .oit li{display:flex;align-items:flex-start;gap:9px;font-size:.91rem;line-height:1.5;margin-bottom:9px}
+    .oit li .ck{color:var(--green);flex-shrink:0;margin-top:1px}
+    .oprice{font-size:.83rem;color:var(--text-sub);margin-bottom:16px}
+    .oprice strong{font-size:1.2rem;color:var(--text);font-weight:700}
+
+    /* ERROS */
+    #errors{background:var(--page-bg)}
+    .eg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+    .ec{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:20px 20px 20px 22px}
+    .ec .h3{font-size:.97rem;margin-bottom:6px} .ec p{font-size:.86rem;color:var(--text-sub);line-height:1.55}
+
+    /* FAQ */
+    #faq{background:var(--page-bg)}
+    .fl{max-width:700px;margin-inline:auto}
+    .fi2{border-bottom:1px solid var(--border)}
+    .fi2:first-child{border-top:1px solid var(--border)}
+    .fb2{width:100%;background:none;border:none;padding:18px 0;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:.97rem;font-weight:500;color:var(--text);cursor:pointer;text-align:left}
+    .fa2{width:22px;height:22px;border-radius:50%;background:var(--page-bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .25s;font-size:.6rem;color:var(--text-sub)}
+    .fb2[aria-expanded="true"] .fa2{background:var(--green);border-color:var(--green);transform:rotate(180deg);color:#fff}
+    .fans{font-size:.92rem;color:var(--text-sub);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .35s ease,padding-bottom .3s}
+    .fans.open{max-height:320px;padding-bottom:18px}
+
+    /* CTA FINAL */
+    #ctaf{background:var(--white);text-align:center}
+    .cbox{background:linear-gradient(135deg,#1c2b21 0%,#1e3428 100%);border-radius:20px;padding:64px 40px;position:relative;overflow:hidden}
+    .cbox::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+    .cbox::after{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(24,184,83,.18),transparent 70%);pointer-events:none}
+    .cbox .tag,.cbox .h2,.cbox .sub{position:relative}
+    .cbox .h2{color:var(--text-hero);margin-bottom:16px}
+    .cbox .sub{color:var(--text-dim);max-width:460px;margin-inline:auto;margin-bottom:36px;font-size:.97rem;line-height:1.7}
+    .cbtns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:relative}
+
+    /* FOOTER */
+    footer{background:#131a15;padding:32px 0}
+    .fr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+    .flogo{font-family:var(--fh);font-weight:800;font-size:1.05rem;color:var(--text-hero)}
+    .flogo span{color:var(--green)}
+    .flinks{display:flex;flex-wrap:wrap;gap:12px 20px}
+    .flinks a{font-size:.83rem;color:rgba(240,253,244,.4);transition:color .2s}
+    .flinks a:hover{color:var(--green)}
+    .fcopy{width:100%;font-size:.75rem;color:rgba(240,253,244,.2);margin-top:10px}
+
+    /* WA FLOAT */
+    .wa{position:fixed;bottom:24px;right:22px;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.45);z-index:9999;transition:transform .2s;font-size:1.5rem}
+    .wa:hover{transform:scale(1.1)}
+
+    @media(max-width:680px){
+      :root{--py:60px}
+      .fwg,.about-grid{grid-template-columns:1fr}
+      .og{grid-template-columns:1fr}
+      .cbox{padding:44px 22px}
+      .sc{padding-right:20px;margin-right:20px}
+    }
+    @media(max-width:420px){
+      .h-ctas,.cbtns{flex-direction:column;align-items:stretch}
+      .h-ctas .btn,.cbtns .btn{justify-content:center}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="wrap hw">
+    <div class="h-badge"><span class="dot"></span><span>Meta Ads &amp; Google Ads · Negócios locais, infoprodutos e e-commerce</span></div>
+    <h1 class="h1 h-title">Seu negócio precisa de clientes,<br>não de <span class="ac">anúncio bonito.</span></h1>
+    <p class="h-sub">Sou Jesse William — desde 2020 ajudo empresas e empreendedores a vender mais pela internet. Mais de R$500 mil investidos e R$10 milhões gerados para clientes reais.</p>
+    <div class="h-ctas">
+      <a href="https://wa.me/5549988046856?text=Oi!%20Quero%20saber%20mais%20sobre%20gestão%20de%20tráfego" class="btn btn-p" target="_blank" rel="noopener">
+        📲 Chamar no WhatsApp
+      </a>
+      <a href="#offers" class="btn btn-ghost">Ver serviços</a>
+    </div>
+    <ul class="h-bullets">
+      <li class="brow"><span class="bchk">✓</span>Diagnóstico honesto — o que está certo e o que está drenando seu orçamento</li>
+      <li class="brow"><span class="bchk">✓</span>Estratégia clara e linguagem simples — sem relatório de 40 páginas que ninguém lê</li>
+      <li class="brow"><span class="bchk">✓</span>Atende negócios locais, infoprodutos, e-commerces e prestadores de serviço</li>
+    </ul>
+    <div class="h-stats">
+      <div class="sc"><div class="sn">+60</div><div class="sd">clientes atendidos</div></div>
+      <div class="sc"><div class="sn">R$500k+</div><div class="sd">em verba gerenciada</div></div>
+      <div class="sc"><div class="sn">R$10M+</div><div class="sd">gerados para clientes</div></div>
+      <div class="sc"><div class="sn">+5 anos</div><div class="sd">no mercado, desde 2020</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <span class="tag" style="margin-bottom:12px;display:block">quem é jesse william</span>
+        <h2 class="h2" style="margin-bottom:20px">Comecei vendendo sites.<br>Descobri que o problema era outro.</h2>
+        <p style="color:var(--text-sub);font-size:.97rem;line-height:1.8;margin-bottom:16px">Na faculdade de Desenvolvimento de Software, aprendi a programar — e comecei a vender sites para empresas. Só que logo percebi uma coisa: o site ficava pronto, mas o cliente continuava sem cliente.</p>
+        <p style="color:var(--text-sub);font-size:.97rem;line-height:1.8;margin-bottom:16px">O problema não era a presença digital. Era o tráfego. Ninguém estava chegando até aquelas páginas.</p>
+        <p style="color:var(--text-sub);font-size:.97rem;line-height:1.8;margin-bottom:28px">Desde 2020 é isso: ajudo empresas e empreendedores a vender mais pela internet — com tráfego pago que funciona de verdade, não só no papel.</p>
+        <a href="https://wa.me/5549988046856?text=Oi%20Jesse!" class="btn btn-p" target="_blank" rel="noopener">📲 Falar com o Jesse</a>
+      </div>
+      <div>
+        <div class="about-card">
+          <div class="about-row">
+            <div class="about-ico">💻</div>
+            <div><div class="about-row-title">Formação em Desenvolvimento de Software</div><div class="about-row-sub">Entende o lado técnico — pixel, rastreamento, integração. Não é só teoria de anúncio.</div></div>
+          </div>
+          <div class="about-divider"></div>
+          <div class="about-row">
+            <div class="about-ico">📈</div>
+            <div><div class="about-row-title">No mercado desde 2020</div><div class="about-row-sub">Passou pelas mudanças de algoritmo, iOS 14 e atualizações de plataforma. Não é iniciante.</div></div>
+          </div>
+          <div class="about-divider"></div>
+          <div class="about-row">
+            <div class="about-ico">🇧🇷</div>
+            <div><div class="about-row-title">Atende todo o Brasil, 100% online</div><div class="about-row-sub">Negócios locais, infoprodutos, e-commerces — de qualquer estado.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NICHOS -->
+<section id="nichos">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:36px">
+      <span class="tag">segmentos que já atendi</span>
+      <h2 class="h2" style="margin-top:10px">Se o seu negócio vende,<br>eu consigo te ajudar.</h2>
+    </div>
+    <div class="nichos-grid">
+      <div class="nicho-card"><div class="nicho-emoji">🏠</div><div class="nicho-label">Corretores de Imóveis</div></div>
+      <div class="nicho-card"><div class="nicho-emoji">🧱</div><div class="nicho-label">Material de Construção</div></div>
+      <div class="nicho-card"><div class="nicho-emoji">⚡</div><div class="nicho-label">Eletricistas &amp; Instaladores</div></div>
+      <div class="nicho-card"><div class="nicho-emoji">🛒</div><div class="nicho-label">E-commerces</div></div>
+      <div class="nicho-card"><div class="nicho-emoji">🎓</div><div class="nicho-label">Infoprodutos &amp; Cursos</div></div>
+      <div class="nicho-card"><div class="nicho-emoji">📊</div><div class="nicho-label">Gestores de Tráfego</div></div>
+      <div class="nicho-card"><div class="nicho-emoji">🔧</div><div class="nicho-label">Prestadores de Serviço</div></div>
+      <div class="nicho-card open"><div class="nicho-emoji">❓</div><div class="nicho-label green">Seu segmento?<br><span style="font-size:.78rem;color:var(--text-sub);font-weight:400">Me chama!</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE EU FAÇO -->
+<section id="what">
+  <div class="wrap">
+    <div class="sh">
+      <span class="tag">o que eu faço na prática</span>
+      <h2 class="h2">Não vendo milagre.<br>Vendo trabalho.</h2>
+      <p class="sub">O que você recebe de verdade quando trabalha comigo.</p>
+    </div>
+    <div class="sg">
+      <div class="sc2"><div class="sico">🔍</div><h3 class="h3">Diagnóstico de campanhas</h3><p>Analiso tudo que você já roda — o que desperdiça verba e o que pode melhorar.</p></div>
+      <div class="sc2"><div class="sico">🚀</div><h3 class="h3">Criação e estrutura de campanhas</h3><p>Construo do zero: público, criativo, segmentação e objetivos — com base no seu negócio.</p></div>
+      <div class="sc2"><div class="sico">⚙️</div><h3 class="h3">Gestão mensal de tráfego</h3><p>Otimização, testes, ajustes de verba e relatórios simples. Você foca no negócio.</p></div>
+      <div class="sc2"><div class="sico">💡</div><h3 class="h3">Suporte estratégico</h3><p>Ajudo a pensar oferta, funil e posicionamento — para o tráfego ter para onde ir.</p></div>
+      <div class="sc2"><div class="sico">📱</div><h3 class="h3">Meta Ads &amp; Google Ads</h3><p>Facebook, Instagram, Google Search e Display — conforme o que faz sentido.</p></div>
+      <div class="sc2"><div class="sico">🎯</div><h3 class="h3">Consultoria pontual</h3><p>Se você precisa de uma resposta agora — sobre estratégia, verba ou plataforma.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRA QUEM É -->
+<section id="forwho">
+  <div class="wrap">
+    <div class="sh">
+      <span class="tag">pra quem é isso</span>
+      <h2 class="h2">Vou ser direto com você</h2>
+      <p class="sub">Prefiro trabalhar com quem posso ajudar de verdade.</p>
+    </div>
+    <div class="fwg">
+      <div class="fwc yes">
+        <div class="fwt g">✅ É pra você se…</div>
+        <ul class="fwl">
+          <li><span>🟢</span>&nbsp; Você tem um produto ou serviço e quer mais clientes via anúncio</li>
+          <li><span>🟢</span>&nbsp; É corretor, dono de material de construção, eletricista ou prestador de serviço</li>
+          <li><span>🟢</span>&nbsp; Tem e-commerce ou infoproduto e quer escalar as vendas</li>
+          <li><span>🟢</span>&nbsp; Está rodando campanhas mas sente que está jogando dinheiro fora</li>
+          <li><span>🟢</span>&nbsp; Tem verba mínima de R$800/mês para investir em anúncios</li>
+        </ul>
+      </div>
+      <div class="fwc no">
+        <div class="fwt r">🚫 Não é pra você se…</div>
+        <ul class="fwl">
+          <li><span>🔴</span>&nbsp; Quer resultado na primeira semana ou quer devolver</li>
+          <li><span>🔴</span>&nbsp; Não tem produto testado ou oferta minimamente definida</li>
+          <li><span>🔴</span>&nbsp; Busca o gestor mais barato — cobro pelo que entrego</li>
+          <li><span>🔴</span>&nbsp; Não quer participar do processo — alinhamento é essencial</li>
+          <li><span>🔴</span>&nbsp; Não tem clareza de quem é o público que quer atingir</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="how">
+  <div class="wrap">
+    <div class="sh">
+      <span class="tag">como funciona</span>
+      <h2 class="h2">Simples assim.</h2>
+      <p class="sub" style="color:var(--text-dim)">Do primeiro contato até as campanhas rodando — sem complicação.</p>
+    </div>
+    <div class="stg">
+      <div class="stc"><div class="big">01</div><div class="sttag">Passo 01</div><h3 class="h3">Conversa inicial</h3><p>Você me conta o negócio, o que já tentou e o que quer alcançar. Sem julgamento.</p></div>
+      <div class="stc"><div class="big">02</div><div class="sttag">Passo 02</div><h3 class="h3">Diagnóstico ou proposta</h3><p>Se for consultoria, faço a análise. Se for gestão, monto proposta com escopo claro.</p></div>
+      <div class="stc"><div class="big">03</div><div class="sttag">Passo 03</div><h3 class="h3">Execução com clareza</h3><p>Você sabe o que está sendo feito, por que e o que esperar. Sem gestor sumido.</p></div>
+      <div class="stc"><div class="big">04</div><div class="sttag">Passo 04</div><h3 class="h3">Acompanhamento contínuo</h3><p>Relatórios periódicos, otimizações e alinhamentos regulares. Sem escuro.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTAS -->
+<section id="offers">
+  <div class="wrap">
+    <div class="sh">
+      <span class="tag">como posso te ajudar</span>
+      <h2 class="h2">Escolha o que faz sentido<br>para o seu momento</h2>
+      <p class="sub">Duas formas de trabalhar juntos.</p>
+    </div>
+    <div class="og">
+      <div class="oc">
+        <span class="tag">Pontual</span>
+        <h2 class="h2">Consultoria</h2>
+        <p class="otag">Diagnóstico completo com plano de ação claro para você executar.</p>
+        <div class="odiv"></div>
+        <ul class="oit">
+          <li><span class="ck">✓</span> Análise completa do gerenciador de anúncios</li>
+          <li><span class="ck">✓</span> Identificação dos pontos de desperdício</li>
+          <li><span class="ck">✓</span> Avaliação de público, criativos e estrutura</li>
+          <li><span class="ck">✓</span> Plano de ação priorizado</li>
+          <li><span class="ck">✓</span> Sessão ao vivo de 60–90 min via vídeo</li>
+          <li><span class="ck">✓</span> Documento de entrega + gravação</li>
+        </ul>
+        <p class="oprice"><strong>Valor sob consulta</strong> — depende do escopo</p>
+        <a href="https://wa.me/5549988046856?text=Quero%20a%20Consultoria" class="btn btn-out" target="_blank" rel="noopener">Quero a consultoria</a>
+      </div>
+      <div class="oc ft">
+        <div class="obadge">Mais contratado</div>
+        <span class="tag">Mensal</span>
+        <h2 class="h2">Gestão de Tráfego</h2>
+        <p class="otag">Cuido de tudo no dia a dia — você foca no negócio.</p>
+        <div class="odiv"></div>
+        <ul class="oit">
+          <li><span class="ck">✓</span> Planejamento estratégico de campanhas</li>
+          <li><span class="ck">✓</span> Criação e configuração das campanhas</li>
+          <li><span class="ck">✓</span> Otimização contínua</li>
+          <li><span class="ck">✓</span> Testes A/B estruturados</li>
+          <li><span class="ck">✓</span> Relatórios quinzenais legíveis</li>
+          <li><span class="ck">✓</span> Suporte por WhatsApp</li>
+          <li><span class="ck">✓</span> Reunião mensal por vídeo</li>
+        </ul>
+        <p class="oprice"><strong>Valor sob consulta</strong> — depende do projeto</p>
+        <a href="https://wa.me/5549988046856?text=Quero%20a%20Gestão%20de%20Tráfego" class="btn btn-p" target="_blank" rel="noopener">Quero a gestão mensal</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ERROS COMUNS -->
+<section id="errors">
+  <div class="wrap">
+    <div class="sh">
+      <span class="tag">erros que corrijo toda semana</span>
+      <h2 class="h2">Você provavelmente já<br>cometeu algum desses</h2>
+      <p class="sub">Não é culpa sua — a maioria aprende tráfego no piloto automático.</p>
+    </div>
+    <div class="eg">
+      <div class="ec"><h3 class="h3">Público muito amplo ou fechado</h3><p>Segmentação errada desperdiça verba desde o primeiro centavo.</p></div>
+      <div class="ec"><h3 class="h3">Campanha para objetivo errado</h3><p>Campanha de reconhecimento querendo gerar venda. Acontece mais do que parece.</p></div>
+      <div class="ec"><h3 class="h3">Anunciar sem oferta clara</h3><p>Se o público não entende o que você vende, mais tráfego só acelera o prejuízo.</p></div>
+      <div class="ec"><h3 class="h3">Pausar campanha cedo demais</h3><p>O algoritmo precisa de dados. Quem para no aprendizado nunca sabe o que funcionaria.</p></div>
+      <div class="ec"><h3 class="h3">Mexer em tudo ao mesmo tempo</h3><p>Mudou público, criativo e lance no mesmo dia. Agora não sabe o que funcionou.</p></div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sh">
+      <span class="tag">perguntas frequentes</span>
+      <h2 class="h2">Respostas diretas para<br>quem não tem tempo a perder</h2>
+    </div>
+    <div class="fl">
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa1">Qual o valor mínimo de verba para começar?<span class="fa2">▼</span></button><div class="fans" id="fa1">Recomendo no mínimo R$800 a R$1.000/mês de verba (valor que vai ao Facebook ou Google — separado da minha taxa). Abaixo disso fica difícil otimizar com segurança.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa2">Quanto tempo para ver resultado?<span class="fa2">▼</span></button><div class="fans" id="fa2">Quem já tem campanha rodando costuma ver melhora nas primeiras semanas. Quem começa do zero leva 30 a 90 dias para o algoritmo estabilizar.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa3">Você garante resultado?<span class="fa2">▼</span></button><div class="fans" id="fa3">Não. Nenhum gestor honesto garante número de venda — isso depende do produto, oferta e mercado. O que garanto: estratégia séria, otimização constante e comunicação clara.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa4">Funciona para o meu nicho?<span class="fa2">▼</span></button><div class="fans" id="fa4">Já trabalhei com corretores, material de construção, eletricistas, e-commerces, infoprodutos e gestores de tráfego. Na conversa inicial te digo se faz sentido.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa5">Tem contrato de fidelidade?<span class="fa2">▼</span></button><div class="fans" id="fa5">Contrato mínimo de 3 meses — resultado leva tempo. Depois, renovação mensal. Sem armadilha de 12 meses.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa6">Você vai ter acesso ao meu gerenciador?<span class="fa2">▼</span></button><div class="fans" id="fa6">Sim, via acesso de parceiro no Business Manager — sem compartilhar senha. Você mantém acesso total à sua conta.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa7">Como funciona a comunicação?<span class="fa2">▼</span></button><div class="fans" id="fa7">WhatsApp em horário comercial para dúvidas rápidas + reuniões mensais por vídeo. Sem sumiço.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa8">Preciso criar os criativos?<span class="fa2">▼</span></button><div class="fans" id="fa8">Oriento o que produzir. A produção fica com você ou criativo parceiro. Em alguns planos incluo orientação de copy.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa9">Atende fora do estado?<span class="fa2">▼</span></button><div class="fans" id="fa9">Sim. Atendo clientes em todo o Brasil, 100% online.</div></div>
+      <div class="fi2"><button class="fb2" aria-expanded="false" aria-controls="fa10">Quanto custa a gestão mensal?<span class="fa2">▼</span></button><div class="fans" id="fa10">Varia conforme escopo, plataformas e verba. A conversa inicial é gratuita — monto uma proposta personalizada para o seu caso.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="ctaf">
+  <div class="wrap">
+    <div class="cbox">
+      <span class="tag">pronto pra começar?</span>
+      <h2 class="h2">Cada semana com campanha errada<br>é dinheiro que não volta.</h2>
+      <p class="sub">A conversa inicial é gratuita, sem compromisso. Você me conta o cenário — eu te digo o que faria.</p>
+      <div class="cbtns">
+        <a href="https://wa.me/5549988046856?text=Oi!%20Quero%20conversar%20sobre%20tráfego%20pago" class="btn btn-p" target="_blank" rel="noopener">📲 Chamar no WhatsApp</a>
+        <a href="https://instagram.com/eusoujessewilliam" class="btn btn-ghost" target="_blank" rel="noopener">Ver no Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="fr">
+      <div class="flogo">Jesse <span>William</span></div>
+      <nav class="flinks">
+        <a href="https://wa.me/5549988046856" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://instagram.com/eusoujessewilliam" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+      <p class="fcopy">© 2025 Jesse William · Todos os direitos reservados · Suas informações não serão compartilhadas com terceiros.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTÃO WA FLUTUANTE -->
+<a href="https://wa.me/5549988046856?text=Oi!%20Vim%20pelo%20link%20da%20bio" class="wa" target="_blank" rel="noopener" aria-label="WhatsApp">📲</a>
+
+<script>
+  document.querySelectorAll('.fb2').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll('.fb2').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+        document.getElementById(b.getAttribute('aria-controls')).classList.remove('open');
+      });
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        document.getElementById(btn.getAttribute('aria-controls')).classList.add('open');
+      }
+    });
+  });
+</script>
+</body>
+</html>
